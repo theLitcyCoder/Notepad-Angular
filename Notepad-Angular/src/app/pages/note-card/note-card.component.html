@@ -1,0 +1,17 @@
+    <mat-card #container class="note-card-container">
+      
+        <mat-card-title-group>
+          <mat-card-title>{{title}}</mat-card-title>
+          <mat-card-subtitle>Small body Small body Small body</mat-card-subtitle>
+          <div class="delete-button-container">
+            <button mat-icon-button color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-card-title-group>
+        <mat-card-content>          
+          <p #bodyText>{{body}}</p>
+          <div #truncator class="fade-out-truncation"></div>
+        </mat-card-content>
+        
+    </mat-card>

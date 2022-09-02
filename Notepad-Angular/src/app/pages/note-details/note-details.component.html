@@ -1,0 +1,30 @@
+<div class="form-container">
+    <form #noteForm="ngForm">
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Title</mat-label>
+                <input matInput type="text">
+                <button matSuffix mat-icon-button aria-label="Clear">
+                  <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Body</mat-label>
+                <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+                <button matSuffix mat-icon-button aria-label="Clear">
+                  <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        
+        <div class="buttons is-grouped is-pulled-right">
+            <button mat-stroked-button color="warn" type="button">Cancel</button>
+            <button mat-raised-button color="primary" type="submit">Save</button>
+        </div>
+    </form>
+</div>
+
+
+
