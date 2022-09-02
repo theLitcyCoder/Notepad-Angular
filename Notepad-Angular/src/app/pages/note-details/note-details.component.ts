@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Note } from 'src/shared/note.model';
 
 @Component({
   selector: 'app-note-details',
@@ -7,9 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NoteDetailsComponent implements OnInit {
 
-  constructor() { }
+  note: Note = new Note;
+
+  constructor() { 
+  }
 
   ngOnInit(): void {
+   
   }
+  
+   clearFields(){
+     this.note.title='';
+     this.note.body='';
+   }
+
+   onSubmit(form: NgForm){
+    console.log(form);
+   }
 
 }

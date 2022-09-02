@@ -1,3 +1,5 @@
+@import '../../../assets/customTheme.scss';
+
 .form-container{
     display: flex;
     flex-direction: column;
@@ -13,6 +15,7 @@
     padding-top: 40px;
 } 
 
+/* Form Buttons */
 .buttons{
     display: block;
     float: right;
@@ -20,4 +23,21 @@
 
 .buttons button{
     margin-right: 10px;
+}
+
+.buttons .saveBtn{
+    background-color: var(--green);
+    color: white;
+}
+
+.form-field textarea{
+    height: 100px;
+}
+
+.form-field mat-label{
+    font-size: 1.2rem;
+}
+
+.form-field input, textarea{
+    font-size: 1.2rem;
 }
