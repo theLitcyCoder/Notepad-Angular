@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Note } from 'src/app/shared/note.model';
+import { doc, addDoc, updateDoc, deleteDoc, collection, collectionData, Firestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,41 +9,45 @@ import { Note } from 'src/app/shared/note.model';
 export class NotesService {
   notes: Note[] = new Array<Note>();
 
-  constructor() {
+  constructor(private afs: Firestore) {
    
    }
 
-  getAll(){
-    return this.notes;
-  }
-
-  get(id: number){
-    return this.notes[id];
-  }
-
-  getId(note: Note){
-    return this.notes.indexOf(note);
-  }
-
-  add(note: Note){
-    // this method will add a note to the notes array and return the id of the note
-    // where the id = index
+  //Add New Note
+  addNote(note: Note){
+    note.id = doc(collection(this.afs, 'id')).id;
    
-    console.log("from add", "title: ", note)
-    let newLength = this.notes.push(note);
-    let index = newLength;
-    console.log("index", index)
-    return index;
+    console.log("Note Added - Note ID ", note.id)
+    return addDoc(collection(this.afs, 'Notes'), note);
   }
 
-  update(id: number, title: string, body: string){
-    let note = this.notes[id];
-    note.title = title;
-    note.body = body;
-    
+  //Get All Notes
+  getNotes(): Observable<Note[]>{
+   let notesRef = collection(this.afs, 'Notes');
+
+   console.log("All Notes - notesRef ", notesRef)
+   return collectionData(notesRef, {idField: 'id'}) as Observable<Note[]>;
   }
 
-  delete(id: number){
-    this.notes.splice(id, 1);
+  //Delete a Note
+  deleteNote(note: Note){
+    let docRef = doc(this.afs, 'Notes/${note.id}');
+   
+    console.log("Note Deleted - docRef ", docRef)
+    return deleteDoc(docRef);
   }
+
+  //Update a Note
+  updateNote(note: Note, notes: any){
+    let docRef = doc(this.afs, 'Notes/${note.id}');
+    console.log("Note Updated - docRef ", docRef)
+    return updateDoc(docRef, notes);
+  }
+
+  
+ 
+
+  
+
+  
 }

@@ -1,11 +1,5 @@
-export class Note{
-    id: number;
-     title: string;
-     body: string;
-
-    constructor(){
-        this.id= -1;
-        this.title='';
-        this.body='';
-    }
+export interface Note{
+    id: string;
+    title: string;
+    desc: string;
 }

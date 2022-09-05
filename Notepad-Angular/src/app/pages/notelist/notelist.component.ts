@@ -9,12 +9,20 @@ import { Note } from 'src/app/shared/note.model';
 })
 export class NotelistComponent implements OnInit {
 
-  notes: Note[] = new Array<Note>();
-  
+  // notes: Note[] = new Array<Note>();
+  notes: any [] = [];
   constructor(private notesService: NotesService) { }
 
   ngOnInit(): void {
     // we want to retrieve all notes from NotesService
-    this.notes = this.notesService.getAll(); 
+  //  this.notes = this.notesService.getNotes(); 
+  this.getAllNotes();
+  }
+
+  getAllNotes(){
+    this.notesService.getNotes().subscribe((res: Note[]) => {
+      console.log(res);
+      this.notes = res;
+    })
   }
 }

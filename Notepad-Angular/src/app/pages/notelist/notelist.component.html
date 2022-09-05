@@ -8,11 +8,15 @@
     </div>
     
     <div class="notes-list">
-        <app-note-card 
-            *ngFor="let note of notes; index as i"
+       <!-- <app-note-card 
+            *ngFor="let note of notes"
             [routerLink]="[i]" 
             [title]="note.title" 
-            [body]="note.body"></app-note-card>
+            [body]="note.body"></app-note-card> -->   
+      <app-note-card 
+            *ngFor="let note of notes"
+            [title]="note.title" 
+            [desc]="note.desc"></app-note-card> 
         <button mat-fab class="addBtn" color="primary" name="add" color="primary" routerLink="new">
             <mat-icon>add</mat-icon>
         </button>

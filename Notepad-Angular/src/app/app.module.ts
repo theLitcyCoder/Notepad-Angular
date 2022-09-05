@@ -14,8 +14,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { NoteDetailsComponent } from './pages/note-details/note-details.component';
-import { FormsModule } from '@angular/forms';
-import { NotesService } from './shared/notes.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -36,9 +38,12 @@ import { NotesService } from './shared/notes.service';
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    provideFirebaseApp(() => initializeApp((environment.firebaseConfig))),
+    provideFirestore(() => getFirestore()),
   ],
-  providers: [NotesService ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,6 @@
 import { Component, ElementRef, Input, OnInit,Renderer2, ViewChild } from '@angular/core';
+import { Note } from 'src/app/shared/note.model';
+import { NotesService } from 'src/app/shared/notes.service';
 
 @Component({
   selector: 'app-note-card',
@@ -8,13 +10,14 @@ import { Component, ElementRef, Input, OnInit,Renderer2, ViewChild } from '@angu
 export class NoteCardComponent implements OnInit {
 
   @Input() title!: string;
-  @Input() body!: string;
+  @Input() desc!: string;
 
   @ViewChild('truncator') truncator!: ElementRef<HTMLElement>;
   @ViewChild('bodyText') bodyText!: ElementRef<HTMLElement>;
   
-
-  constructor(private renderer: Renderer2) { }
+  notes: any [] = [];
+  
+  constructor(private renderer: Renderer2, private notesService: NotesService) { }
 
   ngOnInit(): void {
   
@@ -32,6 +35,14 @@ export class NoteCardComponent implements OnInit {
          // else (there is a text overflow), hide the fade out truncator
          this.renderer.setStyle(this.truncator.nativeElement, 'display', 'none');
        }
+  }
+
+  deleteNote(note: Note){
+    let decision = confirm("Are you sure you want to delete this note?");
+
+    if (decision == true){
+      this.notesService.deleteNote(note);
+    }
   }
 
 }
