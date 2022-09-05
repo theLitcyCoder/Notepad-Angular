@@ -1,13 +1,20 @@
 <div class="main-container">
+    <div>
         <mat-form-field class="search-bar-container" appearance="outline">
             <mat-label>Search</mat-label>
             <input matInput placeholder="Search" name="search">
             <mat-icon color="primary" matSuffix>search</mat-icon>
         </mat-form-field>
-
+    </div>
+    
     <div class="notes-list">
-        <app-note-card title="testin" body="the body"></app-note-card>
-        <app-note-card></app-note-card>
-        <app-note-card></app-note-card>
+        <app-note-card 
+            *ngFor="let note of notes; index as i"
+            [routerLink]="[i]" 
+            [title]="note.title" 
+            [body]="note.body"></app-note-card>
+        <button mat-fab class="addBtn" color="primary" name="add" color="primary" routerLink="new">
+            <mat-icon>add</mat-icon>
+        </button>
     </div>
 </div>

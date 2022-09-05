@@ -6,7 +6,26 @@
     padding-top: 50px;
 }
 
+.search-bar-container{
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: auto;
+}
+
 app-note-card{
     display: block;
     margin-bottom: 25px;
+}
+
+.addBtn button mat-icon{
+    font-size: 25px;
+}
+
+.addBtn {
+    float: right;
+}
+
+.addBtn mat-icon{
+    bottom: 2px;
 }

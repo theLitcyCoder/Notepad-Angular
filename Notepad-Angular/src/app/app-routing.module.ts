@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: '', component: MainLayoutComponent, 
     children: [
       { path: '', component: NotelistComponent}, 
+      { path: 'new', component: NoteDetailsComponent },
       { path: ':id', component: NoteDetailsComponent }
     ] 
   }

@@ -1,27 +1,28 @@
 <div class="form-container">
-    <form #noteForm="ngForm" (ngSubmit)="onSubmit(noteForm)">
+    <form >
         <div class="form-field">
             <mat-form-field appearance="fill">
                 <mat-label>Title</mat-label>
-                <input matInput type="text" name="Title" [(ngModel)]="note.title" required>
-                <button matSuffix mat-icon-button aria-label="Clear" (click)="clearFields()">
+                <input #title matInput type="text" name="Title" [(ngModel)]="note.title" required>
+                <button matSuffix mat-icon-button aria-label="Clear" name="clear" (click)="clearFields()">
                   <mat-icon>close</mat-icon>
                 </button>
             </mat-form-field>
         </div>
         <div class="form-field">
             <mat-form-field appearance="fill">
-                <mat-label>Body</mat-label>
-                <textarea matInput name="Body" placeholder="Ex. It makes me feel..." [(ngModel)]="note.body"></textarea>
-                <button matSuffix mat-icon-button aria-label="Clear" (click)="clearFields()">
+                <mat-label>Body</mat-label> 
+                <textarea #body matInput name="Body" placeholder="Ex. It makes me feel..." [(ngModel)]="note.body"></textarea>
+                <button matSuffix mat-icon-button aria-label="Clear" name="clear" (click)="clearFields()">
                   <mat-icon>close</mat-icon>
                 </button>
             </mat-form-field>
         </div>
-        
+        <button type="button" mat-stroked-button color="primary" (click)="cancel()">Cancel</button>
         <div class="buttons is-grouped is-pulled-right">
-            <button mat-stroked-button color="primary" type="button">Cancel</button>
-            <button class="saveBtn" mat-raised-button type="submit" [disabled]="!noteForm.valid">Save</button>
+           
+            <button class="saveBtn" mat-raised-button color="green"  type="button"  (click)="canSave(title.value, body.value)">save</button>
+
         </div>
     </form>
 </div>
