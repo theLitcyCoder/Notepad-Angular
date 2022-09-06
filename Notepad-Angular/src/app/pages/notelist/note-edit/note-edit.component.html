@@ -1,0 +1,33 @@
+<div class="form-container" *ngFor="let note of notes">
+  <form [formGroup]="editForm">
+      <div class="form-field">
+          <mat-form-field appearance="fill">
+              <mat-label>Title</mat-label>
+              <!-- <input #title matInput type="text" name="Title" [(ngModel)]="note.title" required> -->
+              <input matInput type="text" name="Title" formControlName="editTitle" required>
+              <button matSuffix mat-icon-button aria-label="Clear" name="clear" >
+                <mat-icon>close</mat-icon>
+              </button>
+          </mat-form-field>
+      </div>
+      <div class="form-field">
+          <mat-form-field appearance="fill">
+              <mat-label>Body</mat-label> 
+              <!-- <textarea #body matInput name="Body" placeholder="Ex. It makes me feel..." [(ngModel)]="note.body"></textarea> -->
+              <textarea  matInput name="Body" placeholder="Ex. It makes me feel..." formControlName="editDesc"></textarea>
+              <button matSuffix mat-icon-button aria-label="Clear" name="clear">
+                <mat-icon>close</mat-icon>
+              </button>
+          </mat-form-field>
+      </div>
+      <button type="button" mat-stroked-button color="primary" >Cancel</button>
+      <div class="buttons is-grouped is-pulled-right">
+         
+          <button class="saveBtn" mat-raised-button color="green"  type="button" (click)="updateNote(notes)">Update</button>
+
+      </div>
+  </form>
+</div>
+
+
+

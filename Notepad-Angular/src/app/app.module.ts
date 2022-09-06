@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { NotelistComponent } from './pages/notelist/notelist.component';
 import { MainLayoutComponent } from './pages/main-layout/main-layout.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NoteCardComponent } from './pages/note-card/note-card.component';
+import { NoteEditComponent } from './pages/notelist/note-edit/note-edit.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,7 +24,7 @@ import { environment } from 'src/environments/environment';
     AppComponent,
     NotelistComponent,
     MainLayoutComponent,
-    NoteCardComponent,
+    NoteEditComponent,
     NoteDetailsComponent,
   ],
   imports: [

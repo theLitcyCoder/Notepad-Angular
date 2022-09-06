@@ -13,10 +13,46 @@
             [routerLink]="[i]" 
             [title]="note.title" 
             [body]="note.body"></app-note-card> -->   
-      <app-note-card 
-            *ngFor="let note of notes"
+      <!-- <app-note-card 
+            *ngFor="let note of notes; index as i"
+            link="[i]" 
             [title]="note.title" 
-            [desc]="note.desc"></app-note-card> 
+            [desc]="note.desc"></app-note-card>  -->
+
+
+            <div class="card" *ngFor="let note of notes; index as i"
+            
+            >
+            
+            <mat-card #container class="note-card-container">
+                
+                <mat-card-title-group> 
+                   <mat-card-title>{{note.title}}</mat-card-title>
+                   <mat-card-subtitle>Small body Small body Small body</mat-card-subtitle>
+                   <div class="delete-button-container">
+                     <button mat-icon-button color="warn" (click)="deleteNote(note)">
+                       <mat-icon>delete</mat-icon>
+                     </button>
+                     <button mat-icon-button color="warn" [routerLink]="[i]" >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                   </div>
+               </mat-card-title-group>
+               <mat-card-content>          
+                <p #bodyText>{{note.desc}}</p>
+                <div ></div>
+              </mat-card-content>
+           </mat-card>
+            </div>
+           
+           
+
+
+
+
+
+
+
         <button mat-fab class="addBtn" color="primary" name="add" color="primary" routerLink="new">
             <mat-icon>add</mat-icon>
         </button>

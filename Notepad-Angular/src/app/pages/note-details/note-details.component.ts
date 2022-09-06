@@ -39,9 +39,9 @@ export class NoteDetailsComponent implements OnInit {
     const { value } = this.noteForm
     console.log("AddNote from details: ", value);
 
-    this.noteObj.id = '';
-    this.noteObj.title = value.title;
-    this.noteObj.desc = value.desc;
+    (this.noteObj.id = '');
+    (this.noteObj.title = value.title);
+    (this.noteObj.desc = value.desc);
 
     this.notesService.addNote(this.noteObj).then((note) => {
       if(note) {
@@ -51,6 +51,7 @@ export class NoteDetailsComponent implements OnInit {
       }
     })
   }
+
 
 
 

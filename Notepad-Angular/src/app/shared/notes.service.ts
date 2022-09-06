@@ -17,7 +17,9 @@ export class NotesService {
   addNote(note: Note){
     note.id = doc(collection(this.afs, 'id')).id;
    
-    console.log("Note Added - Note ID ", note.id)
+    console.log("Note Added - Note ID ", note.id);
+    let length = note.id.length
+    let index = length - 1 
     return addDoc(collection(this.afs, 'Notes'), note);
   }
 
@@ -31,7 +33,7 @@ export class NotesService {
 
   //Delete a Note
   deleteNote(note: Note){
-    let docRef = doc(this.afs, 'Notes/${note.id}');
+    let docRef = doc(this.afs, `Notes/${note.id}`);
    
     console.log("Note Deleted - docRef ", docRef)
     return deleteDoc(docRef);
