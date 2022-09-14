@@ -91,3 +91,50 @@
     rgba(255,255,255, 1) 90%);
 }
 
+
+
+/* Add Form */
+.form-container{
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+
+    margin: auto;
+}
+
+.form-field{
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    margin: auto;
+    padding-top: 40px;
+    width: 600px;
+} 
+
+/* Form Buttons */
+.buttons{
+    display: block;
+    float: right;
+}
+
+.buttons button{
+    margin-right: 10px;
+}
+
+.mat-green{
+    background-color: #43a047;
+    color: white;
+}
+
+.form-field textarea{
+    height: 100px;
+}
+
+.form-field mat-label{
+    font-size: 1.2rem;
+}
+
+.form-field input, textarea{
+    font-size: 1.2rem;
+}
+

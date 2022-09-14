@@ -4,28 +4,24 @@ import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NotelistComponent } from './pages/notelist/notelist.component';
-import { MainLayoutComponent } from './pages/main-layout/main-layout.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NoteEditComponent } from './pages/notelist/note-edit/note-edit.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
-import { NoteDetailsComponent } from './pages/note-details/note-details.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore} from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
+import { MatDialogModule} from "@angular/material/dialog";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotelistComponent,
-    MainLayoutComponent,
-    NoteEditComponent,
-    NoteDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,8 +36,12 @@ import { environment } from 'src/environments/environment';
     MatCardModule,
     FormsModule,
     ReactiveFormsModule,
-    provideFirebaseApp(() => initializeApp((environment.firebaseConfig))),
-    provideFirestore(() => getFirestore()),
+    MatDialogModule,
+    MatSnackBarModule,
+    // AngularFireModule.initializeApp(environment.firebaseConfig),
+    // AngularFirestoreModule
+     provideFirebaseApp(() => initializeApp((environment.firebaseConfig))),
+     provideFirestore(() => getFirestore()),
   ],
   providers: [],
   bootstrap: [AppComponent]

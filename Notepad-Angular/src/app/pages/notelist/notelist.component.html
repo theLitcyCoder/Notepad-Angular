@@ -1,4 +1,5 @@
-<div class="main-container">
+
+  <div class="main-container">
     <div>
         <mat-form-field class="search-bar-container" appearance="outline">
             <mat-label>Search</mat-label>
@@ -8,22 +9,8 @@
     </div>
     
     <div class="notes-list">
-       <!-- <app-note-card 
-            *ngFor="let note of notes"
-            [routerLink]="[i]" 
-            [title]="note.title" 
-            [body]="note.body"></app-note-card> -->   
-      <!-- <app-note-card 
-            *ngFor="let note of notes; index as i"
-            link="[i]" 
-            [title]="note.title" 
-            [desc]="note.desc"></app-note-card>  -->
 
-
-            <div class="card" *ngFor="let note of notes; index as i"
-            
-            >
-            
+          <div class="card" *ngFor="let note of notes">           
             <mat-card #container class="note-card-container">
                 
                 <mat-card-title-group> 
@@ -33,28 +20,93 @@
                      <button mat-icon-button color="warn" (click)="deleteNote(note)">
                        <mat-icon>delete</mat-icon>
                      </button>
-                     <button mat-icon-button color="warn" [routerLink]="[i]" >
+                     <button mat-icon-button color="warn" name="edit" (click)="getNoteDetails(note);openUpdateForm(updateTemp)">
                         <mat-icon>edit</mat-icon>
-                      </button>
+                     </button>
                    </div>
                </mat-card-title-group>
+               
                <mat-card-content>          
                 <p #bodyText>{{note.desc}}</p>
-                <div ></div>
-              </mat-card-content>
-           </mat-card>
+                <div></div>
+                </mat-card-content>
+               </mat-card>
             </div>
-           
-           
+            <button mat-fab class="addBtn" color="primary" name="add" (click)="openAddForm(addTemp)">
+              <mat-icon>add</mat-icon>
+            </button>
+        </div>
+  </div>
 
 
-
-
-
-
-
-        <button mat-fab class="addBtn" color="primary" name="add" color="primary" routerLink="new">
-            <mat-icon>add</mat-icon>
-        </button>
-    </div>
+<ng-template #addTemp>
+<!-- Modal Add Notes -->
+<div class="form-container">
+   
+  <form [formGroup]="noteForm">
+      <h1 mat-dialog-title>Add Note</h1>
+      <mat-dialog-content>
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Title</mat-label>
+                <input matInput type="text" name="Title" formControlName="title" [(ngModel)]="title" required>
+                <button matSuffix mat-icon-button aria-label="Clear" name="clear" >
+                  <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Description</mat-label> 
+                <textarea  matInput name="Body" placeholder="Ex. It makes me feel..." formControlName="desc" [(ngModel)]="desc"></textarea>
+                <button matSuffix mat-icon-button aria-label="Clear" name="clear">
+                  <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions align="end">
+        <button type="button" mat-stroked-button color="primary" mat-dialog-close data-bs-dismiss="form-container">Cancel</button>
+        <div class="buttons is-grouped is-pulled-right">
+          <button class="saveBtn" mat-raised-button color="green" mat-dialog-close  type="button" (click)="addNote()" [disabled]="noteForm.invalid">save</button>
+       </div>
+      </mat-dialog-actions>
+  </form>
 </div>
+
+</ng-template>
+
+<ng-template #updateTemp>
+<div class="form-container">
+  <form [formGroup]="editForm">
+    <h1 mat-dialog-title>Update Note</h1>
+      <mat-dialog-content>
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Title</mat-label>
+                <input matInput type="text" name="Title" formControlName="editTitle" [(ngModel)]="noteDetails.title" required>
+                <button matSuffix mat-icon-button aria-label="Clear" name="clear" >
+                  <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="form-field">
+            <mat-form-field appearance="fill">
+                <mat-label>Description</mat-label> 
+                <textarea  matInput name="Body" formControlName="editDesc" [(ngModel)]="noteDetails.desc"></textarea>
+                <button matSuffix mat-icon-button aria-label="Clear" name="clear">
+                  <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+      <button type="button" mat-stroked-button color="primary" mat-dialog-close data-bs-dismiss="form-container">Cancel</button> 
+      <div class="buttons is-grouped is-pulled-right">
+        <button class="saveBtn" mat-raised-button color="green"  mat-dialog-close type="button" (click)="updateNote(noteDetails)"  [disabled]="editForm.invalid">Update</button>
+      </div>
+      </mat-dialog-actions> 
+  </form>
+  
+</div>
+</ng-template>
