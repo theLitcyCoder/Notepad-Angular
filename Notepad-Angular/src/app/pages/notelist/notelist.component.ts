@@ -1,14 +1,88 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NotesService } from 'src/app/shared/notes.service';
 import { Note } from 'src/app/shared/note.model';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatSnackBar,  MatSnackBarConfig,MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { animate, style, transition, trigger, query, stagger} from '@angular/animations';
+import { arrayRemove } from '@firebase/firestore';
 
   @Component({
     selector: 'app-notelist',
     templateUrl: './notelist.component.html',
-    styleUrls: ['./notelist.component.css']
+    styleUrls: ['./notelist.component.css'],
+    animations: [
+      trigger('itemAnim', [
+        // Entry Animation
+        transition('void => *', [
+          // Initial state
+          style({
+            height: 0,
+            opacity: 0,
+            transform: 'scale(0.85)',
+            'margin-bottom': 0,
+
+            // we have to expand out the padding properties
+            paddingTop: 0,
+            paddingBottom: 0,
+            paddingLeft: 0,
+            paddingRight: 0           
+          }),
+          // we first want to animate the spacing (which includes height and margin)
+          animate('50ms', style({
+            height: '*',
+            'margin-bottom':'*', 
+            paddingTop: '*',
+            paddingBottom: '*',
+            paddingLeft: '*',
+            paddingRight: '*'
+          })),
+          animate(68)
+        ]),
+
+        transition('* => void', [
+          //first scale up
+          animate(50, style({
+            transform: 'scale(1.05)'
+          })),
+           // then scale down back to normal size while begining to fade out
+           animate(50, style({
+            transform: 'scale(1)',
+            opacity: 0.75
+          })),
+          // scale down and fade out completely
+          animate('120ms ease-out', style({
+            transform:'scale(0.68)',
+            opacity: 0
+          })),
+          //then animate the spacing (which includes height, margin and padding)
+          animate('150ms ease-out', style({
+            opacity: 0,
+            height: 0,
+            'margin-bottom':'0', 
+            paddingTop: 0,
+            paddingBottom: 0,
+            paddingLeft: 0,
+            paddingRight: 0
+          }))
+        ])
+      ]),
+      trigger('listAnim', [
+        transition('* => *', [
+          query(':enter', [
+            style({
+              opacity: 0,
+              height: 0
+            }),
+            stagger(100, [
+              animate('0.2s ease')
+            ])
+          ], {
+            optional: true
+          })
+      ])
+    ])
+   ]
   })
 export class NotelistComponent implements OnInit {
   form!: FormGroup;
@@ -17,32 +91,25 @@ export class NotelistComponent implements OnInit {
   noteForm!: FormGroup;
   editForm!: FormGroup;
 
-  horizontalPosition: MatSnackBarHorizontalPosition = 'start';
-  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-
   public noteDetails: any;
 
   notes: any = [];
-  temp:any
+  temp:any;
   title!: string;
-  desc!: string
+  desc!: string;
   noteObj: Note = {
     id: '',
     title: '',
     desc: ''
   }
   durationInSeconds = 5;
-
-  @ViewChild('truncator') truncator!: ElementRef<HTMLElement>;
-  @ViewChild('bodyText', { static: true }) bodyText!: ElementRef<HTMLElement>;
-    id!: string;
-
-  constructor(public dialog: MatDialog, 
-    private renderer: Renderer2, 
-    private notesService: NotesService,
-    private _snackBar: MatSnackBar
+  id!: string;
+  display: string = '';
+  del: any;
   
-    ) 
+  constructor(public dialog: MatDialog, 
+    private notesService: NotesService,
+    private _snackBar: MatSnackBar ) 
     {
       this.noteForm = new FormGroup({
         title: new FormControl(),
@@ -54,27 +121,13 @@ export class NotelistComponent implements OnInit {
   });
   }
 
- ngAfterViewInit() {
-  // // Work out if there is a text overflow and if not, then hide truncator
-  // let bodyStyle = window.getComputedStyle(this.bodyText.nativeElement, null);
-  // let viewableHeight = parseInt(bodyStyle.getPropertyValue('height'), 8);
-
-  //  if(this.bodyText.nativeElement.scrollHeight > viewableHeight){
-  //    // if there is no text overflow, show the fade out truncator
-  //    this.renderer.setStyle(this.truncator.nativeElement, 'display', 'block');
-  //  } else {
-  //    // else (there is a text overflow), hide the fade out truncator
-  //    this.renderer.setStyle(this.truncator.nativeElement, 'display', 'none');
-  //  }
-}
-
   ngOnInit(): void {
     // we want to retrieve all notes from NotesService
-  this.getAllNotes();
+    this.getAllNotes();
   }
 
   resetForm(){
-    this.id=''
+    this.id='';
     this.title='';
     this.desc='';
   }
@@ -91,8 +144,15 @@ export class NotelistComponent implements OnInit {
     const dialogRef = this.dialog.open(templateRef, { 
     });
     dialogRef.beforeClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
 
-      console.log('The dialog was closed',this.title);
+  openConfirmDeleteForm(templateRef:any): void {
+    const dialogRef = this.dialog.open(templateRef, { 
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');      
     });
   }
 
@@ -103,38 +163,38 @@ export class NotelistComponent implements OnInit {
     })
   }
   
-
-//  Implement Get Note Details
+ // Implement Get Note Details
   getNoteDetails(note: Note){
     this.noteDetails = note;
-    console.log(this.noteDetails)
   }
 
   getAllNotes(){
     this.notesService.getNotes().subscribe((res: Note[]) => {
-      console.log(res);
       this.notes = res;
     }, err => {
-      alert('Error while fecthing note data')
+      alert('Error while fetching note data');
     })
   }
 
-  deleteNote(note: Note){
-    let decision = confirm("Are you sure you want to delete this note? ");
 
-    if (decision == true){
-       this.notesService.deleteNote(note).then();
-       console.log(note)
-    }
-  }
+  delete(){
+    this.notesService.deleteNote(this.del).then(() => {
+    this.openSnackBar("Note Deleted Successfully", "ok");
+    this.resetForm();
+   })
+ }
+
+ deleteNote(note:Note){
+  this.del = note;
+ }
 
   addNote(){
-    const { value } = this.noteForm
+    const { value } = this.noteForm;
     this.noteObj.id =  '';
     this.noteObj.title = value.title;
     this.noteObj.desc = value.desc;  
   
-     this.notesService.addNote(this.noteObj).then(() => {
+    this.notesService.addNote(this.noteObj).then(() => {
       this.openSnackBar("Note Added Successfully", "ok")
         this.resetForm();
     })
@@ -148,7 +208,37 @@ export class NotelistComponent implements OnInit {
     this.noteObj.desc = value.editDdesc;
     this.notesService.updateNote(note, this.noteObj);
     this.resetForm();
-    this.openSnackBar("Note Updated Successfully", "ok")
-}
+    this.openSnackBar("Note Updated Successfully", "ok");
+  }
+
+  canSave(){
+    let can;
+    if(this.title != ''){
+      can = true;
+    }
+    else{
+      can = false;
+    }
+    return can;
+  }
+
+  filter(query: string){
+    query = query.toLowerCase().trim();
+
+    // split up the search query into individual words
+    let terms: string[] = query.split(' '); //split on spaces
+    //remove duplicate search terms
+
+  }
+
+  // removeDuplicates(arr: Array<any>) : Array<any><any> {
+  //   let uniqueResults: Set<any> = new Set<any>
+  //   // loop through the input array and
+  //   arr.forEach(element =>  uniqueResults{
+      
+  //   });
+
+  
+  // }
 }
 
