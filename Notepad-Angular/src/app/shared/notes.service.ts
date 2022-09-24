@@ -6,18 +6,16 @@ import {
   collection,
   collectionData,
   doc,
-  docData,
   deleteDoc,
-  updateDoc,
-  DocumentReference,
-  setDoc,
-  deleteField,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class NotesService {
+
+  notes: Note[] = new Array<Note>();
+
     constructor(private afs: Firestore) {
    }
 
@@ -25,12 +23,15 @@ export class NotesService {
   addNote(note: Note){
      console.log("Note Addeds - Note ID ", note);
      note.id = doc(collection(this.afs, 'id')).id;
-   
      return addDoc(collection(this.afs, 'Notes'), note);
   }
 
+  getId(note: Note) {
+    return this.notes.indexOf(note);
+  }
+
    //Update a Note
-   updateNote(note: Note, notes:any){
+   updateNote(note: Note){
     this.deleteNote(note);
     this.addNote(note)
   }

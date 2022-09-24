@@ -5,24 +5,22 @@
           <mat-icon>add</mat-icon>
         </button>
         <mat-form-field class="search-bar-container" appearance="outline">
-            <mat-label>Search</mat-label>
-            <input matInput placeholder="Search" name="search">
+            <input matInput #filterInput placeholder="Search" name="search" type="text" (keyup)="filter($any($event).target.value)">
             <mat-icon color="primary" matSuffix>search</mat-icon>
         </mat-form-field>
       
     </div>
     
-    <div class="notes-list" >
-    
-          <div class="card" *ngFor="let note of notes" >           
-            <mat-card #container class="note-card-container" >              
+    <div class="notes-list">
+          <div class="card" *ngFor="let note of filteredNotes" (click)="getNoteDetails(note);openUpdateForm(updateTemp)"  >           
+            <mat-card #container class="note-card-container">              
                   <mat-card-title-group> 
                     <mat-card-title>{{note.title}}</mat-card-title>
                     <div class="delete-button-container">
-                      <button mat-icon-button color="warn" name="edit" (click)="getNoteDetails(note);openUpdateForm(updateTemp)">
+                      <!-- <button mat-icon-button color="warn" name="edit">
                           <mat-icon>edit</mat-icon>
-                      </button>
-                      <button mat-icon-button color="warn" (click)="deleteNote(note);openConfirmDeleteForm(confirmDelete)">
+                      </button> -->
+                      <button mat-icon-button color="warn" (click)="deleteNote(note);openConfirmDeleteForm(confirmDelete, $event)">
                         <mat-icon>delete</mat-icon>
                       </button>
                     </div>
@@ -50,7 +48,7 @@
         <div class="form-field">
             <mat-form-field appearance="outline">
                 <mat-label>Title</mat-label>
-                <input matInput type="text" name="Title" formControlName="title" [(ngModel)]="title" required>
+                <input matInput type="text" name="Title" formControlName="title" type="text" [(ngModel)]="title" required>
                 <button matSuffix mat-icon-button aria-label="Clear" name="clear" >
                   <mat-icon>close</mat-icon>
                 </button>

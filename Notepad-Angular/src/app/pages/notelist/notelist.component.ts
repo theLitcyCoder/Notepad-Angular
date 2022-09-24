@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NotesService } from 'src/app/shared/notes.service';
 import { Note } from 'src/app/shared/note.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -85,15 +85,18 @@ import { arrayRemove } from '@firebase/firestore';
    ]
   })
 export class NotelistComponent implements OnInit {
+
+  notes: Note[] = new Array<Note>();
+  filteredNotes: Note[] = new Array<Note>();
   form!: FormGroup;
   noteList: Note[] = [];
 
   noteForm!: FormGroup;
   editForm!: FormGroup;
 
-  public noteDetails: any;
+  @ViewChild('filterInput') filterInputElRef!: ElementRef<HTMLInputElement>;
+  noteDetails: any;
 
-  notes: any = [];
   temp:any;
   title!: string;
   desc!: string;
@@ -106,6 +109,7 @@ export class NotelistComponent implements OnInit {
   id!: string;
   display: string = '';
   del: any;
+  searchedText = '';
   
   constructor(public dialog: MatDialog, 
     private notesService: NotesService,
@@ -148,12 +152,13 @@ export class NotelistComponent implements OnInit {
     });
   }
 
-  openConfirmDeleteForm(templateRef:any): void {
+  openConfirmDeleteForm(templateRef:any, event: { stopPropagation: () => void; }): void {
     const dialogRef = this.dialog.open(templateRef, { 
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');      
     });
+    event.stopPropagation();
   }
 
   openSnackBar(message: string, action: string) {
@@ -171,18 +176,18 @@ export class NotelistComponent implements OnInit {
   getAllNotes(){
     this.notesService.getNotes().subscribe((res: Note[]) => {
       this.notes = res;
-    }, err => {
-      alert('Error while fetching note data');
+       this.filteredNotes = res;
+     // this.filter('');
     })
   }
 
-
   delete(){
     this.notesService.deleteNote(this.del).then(() => {
-    this.openSnackBar("Note Deleted Successfully", "ok");
-    this.resetForm();
-   })
- }
+      this.openSnackBar("Note Deleted Successfully", "ok");
+    })
+    this.filter(this.filterInputElRef.nativeElement.value);
+
+  }
 
  deleteNote(note:Note){
   this.del = note;
@@ -201,19 +206,14 @@ export class NotelistComponent implements OnInit {
   }
   
   updateNote(note: Note){
-    const { value } = this.editForm;
-    this.noteObj.id = note.id;
-
-    this.noteObj.title = value.editTitle;
-    this.noteObj.desc = value.editDdesc;
-    this.notesService.updateNote(note, this.noteObj);
+    this.notesService.updateNote(note);
     this.resetForm();
     this.openSnackBar("Note Updated Successfully", "ok");
   }
 
   canSave(){
     let can;
-    if(this.title != ''){
+    if(this.title != '' && this.desc != ''){
       can = true;
     }
     else{
@@ -223,22 +223,86 @@ export class NotelistComponent implements OnInit {
   }
 
   filter(query: string){
+    console.log(query)
     query = query.toLowerCase().trim();
 
+    let allResults: Note[] = new Array<Note>();
     // split up the search query into individual words
     let terms: string[] = query.split(' '); //split on spaces
     //remove duplicate search terms
+    terms = this.removeDuplicates(terms);
+    // compile all relevant results into the allResults array
+    terms.forEach(term => {
+      let results: Note[] = this.relevantNotes(term);
+      // append results to the allResults array (deconstruct assignment)
+      allResults = [...allResults, ...results]
+    });
 
+    // allResults will include duplicate notes
+    // because a particular note can be the result of many search terms
+    // but we don't want to show the same note multiple times on the UI
+    // so we first must remove the duplicates
+    let uniqueResults = this.removeDuplicates(allResults);
+    this.filteredNotes = uniqueResults;
+
+    // now sort by relevancy
+    this.sortByRelevancy(allResults);
   }
 
-  // removeDuplicates(arr: Array<any>) : Array<any><any> {
-  //   let uniqueResults: Set<any> = new Set<any>
-  //   // loop through the input array and
-  //   arr.forEach(element =>  uniqueResults{
-      
-  //   });
+  removeDuplicates(arr: Array<any>) : Array<any> {
+      let uniqueResults: Set<any> = new Set<any>();
+      // loop through the input array and add the items to the set
+      arr.forEach(e =>  uniqueResults.add(e));
 
+      return Array.from(uniqueResults);
+  }
+
+  relevantNotes(query: string|any[]) {
+    let y: any
+    if( query || (typeof query === 'string' && query.length === 0) ){
+     y = query; 
+   }
+   let relevantNotes = this.notes.filter((note) => {
+      console.log("return")
+      if (note.title && note.title.toLowerCase().includes(y)) {
+        return true;
+      }
+      if(note.desc && note.desc.toLowerCase().includes(y)){
+        return true;
+      }
+      return false;
+      
+    })
+
+    return relevantNotes;
+  }
+
+  sortByRelevancy(searchResults: Note[]){
+    // this method will calculate the relevancy of a note on the number of times it appears in
+    // the search results
+
+    let noteCountObj: any = {}; // format - key:value => NoteId:number (note object id : count)
+    
+    searchResults.forEach(note => {
+      let noteId = this.notesService.getId(note); // get the notes id
+
+      if(noteCountObj[noteId]){
+        noteCountObj[noteId] += 1;
+      } else {
+        noteCountObj[noteId] = 1;
+      }
+    })
+
+    this.filteredNotes = this.filteredNotes.sort((a: Note, b: Note) => {
+      let aId = this.notesService.getId(a);
+      let bId = this.notesService.getId(b);
+
+      let aCount = noteCountObj[aId];
+      let bCount = noteCountObj[bId];
+
+      return bCount - aCount;
+    })
+  }
   
-  // }
 }
 
