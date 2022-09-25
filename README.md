@@ -1,2 +1,0 @@
-# Notepad-Angular
-ng serve
