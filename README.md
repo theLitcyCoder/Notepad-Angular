@@ -1,1 +1,2 @@
 # Notepad-Angular
+ng serve
