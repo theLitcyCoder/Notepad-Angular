@@ -1,23 +1,35 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"
+integrity="sha256-46qynGAkLSFpVbEBog43gvNhfrOj+BmwXdxFgVK/Kvc=" crossorigin="anonymous" />
 <div class="layout-box">
     <!-- Top Bar -->
     <mat-toolbar class="top-bar" color="primary">
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-        <mat-icon>menu</mat-icon>
-    </button> 
-    <span class="main-title">Notez</span>
-    <span class="example-spacer"></span>
-    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-        <mat-icon>favorite</mat-icon>
-    </button>
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-        <mat-icon>share</mat-icon>
-    </button>
+        <div class="logo">
+            <img src="assets/images/devdarklogo.png" alt="alicia">
+        </div>
+        <button mat-icon-button class="nav-toggle" aria-label="toggle navigation" (click)="menuControl()">
+            <mat-icon>menu</mat-icon>
+        </button> 
+        <nav class="nav" [class.go]="go">
+            <div class="right-side">
+                <div class="nav_list">
+                    <a href="https://thelitcycoder.github.io/Portfolio/index.html#home" class="nav_link">Home</a>
+                </div>
+                <div class="nav_list">
+                    <a href="https://thelitcycoder.github.io/Portfolio/index.html#about" class="nav_link">About Me</a>
+                </div>
+                <div class="nav_list">
+                    <a href="https://thelitcycoder.github.io/Portfolio/index.html#work" class="nav_link">My Projects</a>
+                </div>
+            </div>
+        </nav>
     </mat-toolbar>
-    
+        
     <!-- Main Content -->
     <div class="page-content">
         <router-outlet></router-outlet>
+        
     </div>
+    <app-notefooter></app-notefooter>
 </div>
   
   

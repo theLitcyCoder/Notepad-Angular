@@ -17,11 +17,13 @@ import { getFirestore, provideFirestore} from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { MatDialogModule} from "@angular/material/dialog";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotefooterComponent } from './pages/notefooter/notefooter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotelistComponent,
+    NotefooterComponent,
   ],
   imports: [
     BrowserModule,

@@ -7,8 +7,7 @@
         <mat-form-field class="search-bar-container" appearance="outline">
             <input matInput #filterInput placeholder="Search" name="search" type="text" (keyup)="filter($any($event).target.value)">
             <mat-icon color="primary" matSuffix>search</mat-icon>
-        </mat-form-field>
-      
+        </mat-form-field>      
     </div>
     
     <div class="notes-list">
@@ -122,3 +121,5 @@
     </div>
   </div>
 </ng-template>
+
+  
