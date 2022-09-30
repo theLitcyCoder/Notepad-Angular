@@ -47,6 +47,12 @@
   z-index: 2
   /* padding-top: -10vh; */
 }
+
+.title{
+  font-size: 30px;
+  margin-top: 45px;
+}
+
   /* Center child element (the heading) */
   .main-title{
     text-align: center;
